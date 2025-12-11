@@ -95,7 +95,6 @@ def send_sms(mobile, otp, reason):
     except: return False
 
 def calculate_salary_logic(emp_id, pay_month, pay_year, base_salary):
-    # Logic: 5th to 5th
     if pay_month == 1:
         s_date = date(pay_year - 1, 12, 5)
         e_date = date(pay_year, pay_month, 5)
@@ -185,10 +184,10 @@ else:
         emp_data = run_query("SELECT id, name, salary, pin FROM employees")
         
         # PIN RESET MANAGEMENT
-        if st.session_state.get('reset_otp', False):
-            st.markdown("### 🔑 PIN Reset Request")
-            st.info(f"Technician requested a PIN reset. Give them this OTP: **{st.session_state.reset_otp}**")
-            if st.button("Clear OTP"): del st.session_state.reset_otp
+        if st.session_state.get('otp', False):
+            st.markdown("### 🔑 Technician PIN Reset Code")
+            st.info(f"Technician requested a PIN reset. Give them this OTP: **{st.session_state.otp}**")
+            # The technician uses this OTP in the Attendance App to set a new PIN.
         
         st.markdown("---")
         
@@ -198,8 +197,6 @@ else:
             # --- INDIVIDUAL SLIP ---
             st.markdown("#### Individual Slip")
             s_emp = st.selectbox("Select Staff", df['id'], format_func=lambda x: df[df['id']==x]['name'].values[0])
-            
-            # Display current PIN for quick reference
             current_pin = df[df['id']==s_emp]['pin'].values[0]
             st.caption(f"Current PIN for {df[df['id']==s_emp]['name'].values[0]}: **{current_pin}**")
             
